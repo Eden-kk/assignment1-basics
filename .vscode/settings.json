@@ -1,4 +1,59 @@
 {
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-  "python.terminal.activateEnvironment": true
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.indexing": false,
+  "python.analysis.autoImportCompletions": false,
+  "python.analysis.useLibraryCodeForTypes": false,
+  "python.analysis.exclude": [
+    "${workspaceFolder}/data/**",
+    "${workspaceFolder}/.venv/**",
+    "${workspaceFolder}/.venv_broken_20260322_1/**",
+    "${workspaceFolder}/.venv_incomplete_20260322_2/**",
+    "${workspaceFolder}/.git/**",
+    "${workspaceFolder}/.pytest_cache/**",
+    "${workspaceFolder}/**/__pycache__/**",
+    "${workspaceFolder}/tests/_snapshots/**"
+  ],
+  "files.watcherExclude": {
+    "**/data/**": true,
+    "**/.venv/**": true,
+    "**/.venv_broken_20260322_1/**": true,
+    "**/.venv_incomplete_20260322_2/**": true,
+    "**/.git/**": true,
+    "**/.pytest_cache/**": true,
+    "**/__pycache__/**": true,
+    "**/tests/_snapshots/**": true
+  },
+  "files.exclude": {
+    "**/data": true,
+    "**/.venv": true,
+    "**/.venv_broken_20260322_1": true,
+    "**/.venv_incomplete_20260322_2": true,
+    "**/.pytest_cache": true,
+    "**/__pycache__": true
+  },
+  "search.exclude": {
+    "**/data/**": true,
+    "**/.venv/**": true,
+    "**/.venv_broken_20260322_1/**": true,
+    "**/.venv_incomplete_20260322_2/**": true,
+    "**/.git/**": true,
+    "**/.pytest_cache/**": true,
+    "**/__pycache__/**": true,
+    "**/tests/_snapshots/**": true
+  },
+  "cursorpyright.analysis.autoImportCompletions": false,
+  "cursorpyright.analysis.diagnosticMode": "openFilesOnly",
+  "cursorpyright.analysis.exclude": [
+    "${workspaceFolder}/data/**",
+    "${workspaceFolder}/.venv/**",
+    "${workspaceFolder}/.venv_broken_20260322_1/**",
+    "${workspaceFolder}/.venv_incomplete_20260322_2/**",
+    "${workspaceFolder}/.git/**",
+    "${workspaceFolder}/.pytest_cache/**",
+    "${workspaceFolder}/**/__pycache__/**",
+    "${workspaceFolder}/tests/_snapshots/**"
+  ],
+  "cursorpyright.analysis.useLibraryCodeForTypes": false
 }

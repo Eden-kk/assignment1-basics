@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 
 import torch
+from math import cos, pi
 
 
 class AdamW(torch.optim.Optimizer):
@@ -61,4 +62,18 @@ def get_lr_cosine_schedule(
     cosine_cycle_iters: int,
 ) -> float:
     """Return the learning rate at iteration ``it`` under a cosine schedule with warmup."""
-    raise NotImplementedError
+    if it < warmup_iters:
+        return max_learning_rate * it / warmup_iters
+    if it >= cosine_cycle_iters:
+        return min_learning_rate
+        
+    progress = (it - warmup_iters) / (cosine_cycle_iters - warmup_iters)
+    return min_learning_rate + 0.5 * (
+        1 + cos(pi * progress)
+    ) * (max_learning_rate - min_learning_rate)
+
+
+def set_learning_rate(optimizer: torch.optim.Optimizer, learning_rate: float) -> None:
+    """Update every parameter group's learning rate in-place."""
+    for group in optimizer.param_groups:
+        group["lr"] = learning_rate

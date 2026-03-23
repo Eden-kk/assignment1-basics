@@ -1,0 +1,9 @@
+data/
+.venv/
+.venv_broken_20260322_1/
+.venv_incomplete_20260322_2/
+.git/
+.pytest_cache/
+__pycache__/
+*.npy
+*.gz

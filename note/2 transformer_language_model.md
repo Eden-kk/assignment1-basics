@@ -264,6 +264,59 @@ std = (2 / (d_model + d_ff)) ** 0.5
 torch.nn.init.trunc_normal_(weight, mean=0.0, std=std, a=-3 * std, b=3 * std)
 ```
 
+## Why `d_ff = 8/3 * d_model` for SwiGLU
+
+In a standard Transformer FFN, the hidden dimension is often set to:
+
+```python
+d_ff = 4 * d_model
+```
+
+That choice matches the parameter count of the classic two-layer feedforward block:
+
+- `W1`: `(d_ff, d_model)`
+- `W2`: `(d_model, d_ff)`
+
+If `d_ff = 4 * d_model`, the total parameter count is:
+
+```text
+d_model * 4d_model + 4d_model * d_model = 8 d_model^2
+```
+
+SwiGLU uses three matrices instead:
+
+- `W1`: `(d_ff, d_model)`
+- `W2`: `(d_model, d_ff)`
+- `W3`: `(d_ff, d_model)`
+
+So its total parameter count is:
+
+```text
+3 * d_model * d_ff
+```
+
+To keep the SwiGLU block at roughly the same parameter budget as a standard `4 * d_model` FFN, set:
+
+```text
+3 * d_model * d_ff ≈ 8 d_model^2
+```
+
+Solving for `d_ff` gives:
+
+```text
+d_ff ≈ 8/3 * d_model
+```
+
+That is why the handout uses `8/3 * d_model` rather than `4 * d_model` for SwiGLU.
+
+If you used `d_ff = 4 * d_model` with SwiGLU, the block would instead have:
+
+```text
+3 * d_model * 4d_model = 12 d_model^2
+```
+
+which is substantially larger than the classic FFN.
+
 ### Embedding matrix
 
 ```python
@@ -296,6 +349,176 @@ out_odd = x_even * sin + x_odd * cos
 
 return torch.stack((out_even, out_odd), dim=-1).flatten(-2)
 ```
+
+## Generation notes
+
+Section 6 of the handout recommends a decoding function that:
+
+- conditions on a user-provided prompt `x1...t`
+- samples a continuation token by token
+- stops when an `<|endoftext|>` token is produced
+- supports temperature scaling and top-p sampling
+
+The handout specifies the stopping condition clearly, but it does not force a single return convention for:
+
+- whether the returned token sequence includes the original prompt
+- whether the returned sequence includes the final `eos` token
+
+In practice, a token-level `decode(...)` helper often returns the full sequence:
+
+```python
+prompt + generated_tokens
+```
+
+and stops immediately after sampling `eos`.
+
+## Temperature scaling before softmax
+
+Do not add a `temperature` argument to the generic `softmax` helper. Instead, scale the logits before calling `softmax`:
+
+```python
+next_token_logits = logits[:, -1, :]
+scaled_logits = next_token_logits / temperature
+probs = softmax(scaled_logits, dim=-1)
+```
+
+This keeps responsibilities clean:
+
+- `softmax(x, dim)` stays a general tensor utility
+- generation code handles temperature-specific decoding logic
+
+## Why take `logits[:, -1, :]`
+
+During decoding, the model outputs a next-token distribution at every sequence position:
+
+```python
+logits.shape == (batch_size, seq_len, vocab_size)
+```
+
+When generating the next token, only the final position matters:
+
+```python
+next_token_logits = logits[:, -1, :]
+```
+
+This produces:
+
+```python
+(batch_size, vocab_size)
+```
+
+which is the distribution used to sample `x_{t+1}`.
+
+## `torch.multinomial(...)`
+
+Use `torch.multinomial` to sample token IDs from a probability distribution.
+
+```python
+next_token = torch.multinomial(probs, num_samples=1)
+```
+
+If:
+
+```python
+probs.shape == (batch_size, vocab_size)
+```
+
+then:
+
+```python
+next_token.shape == (batch_size, 1)
+```
+
+To remove the trailing singleton dimension:
+
+```python
+next_token = torch.multinomial(probs, num_samples=1).squeeze(-1)
+```
+
+This gives:
+
+```python
+(batch_size,)
+```
+
+## Top-p sampling pattern
+
+Given a probability distribution `q`, top-p sampling:
+
+1. sorts token probabilities from largest to smallest
+2. finds the smallest prefix whose cumulative probability is at least `p`
+3. zeros out all remaining tokens
+4. renormalizes
+5. samples from the truncated distribution
+
+Typical implementation pattern:
+
+```python
+sorted_probs, sorted_indices = torch.sort(probs, dim=-1, descending=True)
+cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
+
+keep_mask = cumulative_probs <= top_p
+keep_mask[..., 0] = True
+
+shifted_keep_mask = keep_mask.clone()
+shifted_keep_mask[..., 1:] = keep_mask[..., :-1]
+shifted_keep_mask[..., 0] = True
+
+filtered_sorted_probs = sorted_probs * shifted_keep_mask
+filtered_probs = torch.zeros_like(probs)
+filtered_probs.scatter_(-1, sorted_indices, filtered_sorted_probs)
+probs = filtered_probs / filtered_probs.sum(dim=-1, keepdim=True)
+```
+
+The `scatter_` step restores probabilities back to original vocabulary order after sorting.
+
+## `unsqueeze(0)` for decoding
+
+When decoding a single prompt, token IDs often start as a 1D tensor or Python list:
+
+```python
+tokens = [101, 2057, 2024]
+```
+
+Transformers expect batched token IDs:
+
+```python
+(batch_size, seq_len)
+```
+
+So convert the prompt to a batch of size 1:
+
+```python
+input_ids = torch.tensor(tokens, dtype=torch.long, device=device).unsqueeze(0)
+```
+
+This changes the shape from:
+
+```python
+(seq_len,)
+```
+
+to:
+
+```python
+(1, seq_len)
+```
+
+## `next(model.parameters()).device`
+
+If the caller does not specify a device for decoding, a common fallback is:
+
+```python
+device = next(model.parameters()).device
+```
+
+Here:
+
+- `model.parameters()` returns an iterator over model parameters
+- `next(...)` retrieves the first parameter tensor
+- `.device` reads the device that parameter lives on
+
+This is a convenient way to place decoding tensors on the same device as the model.
 
 ## Practical summary
 
