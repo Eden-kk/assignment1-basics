@@ -4,7 +4,7 @@ from collections.abc import Sequence
 
 import torch
 
-from .transformerlm import TransformerLM, softmax
+from ..model import TransformerLM, softmax
 
 
 def sample_next_token(
@@ -71,4 +71,3 @@ def decode(
         if next_token_id == eos_token_id:
             break
     return tokens
-

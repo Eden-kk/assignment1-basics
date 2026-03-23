@@ -152,3 +152,48 @@ The next day, Anna went to the potato, so he wanted to have a littleled in the k
 Her mom saw her and said, "I do you!" They watched the top of the bucket and forth. They had a fun day and clapped Sue's sister played with the heart. They played each day, Jim had a nice place back again’s looked which.
 <|endoftext|>
 
+## Run: layer-norm-ablation-lr-1e-3
+- Timestamp: 2026-03-23T12:39:34.491583-07:00
+- Experiment: layer_norm_ablation
+- W&B Project: cs336-basics
+- W&B Group: layer-norm-ablation
+- Tags: tinystories, rmsnorm_ablation, no_norm
+- Dataset: data/TinyStoriesV2-GPT4-train.npy
+- Validation Dataset: data/TinyStoriesV2-GPT4-valid.npy
+- Model: d_model=128, layers=4, heads=4, d_ff=384
+- Optimization: lr=0.001, min_lr=1e-05, batch_size=32, grad_clip=1.0
+- Latest train loss: 11.298946
+- Best valid loss: 11.261833
+- Sample prompt: Once upon a time
+- Sample output: Once upon a time Christmasearcherved assassination stirring provisional2017 top Springer nature furry Machina catastrophe discriminatory Sunniumbling QuestBoy 60lbomeistedgae KetCollect metab built Aerial reliably Applyesisomo blasma hig designated fullest Caleb charter Marcoslamm notedSerVis381 captainulzerness029 robberies premise overwrite Jonah Mood Authorities Islamic beverageships northern wigWolf Live RAIDitzerland revelation?) dossier prudentront eliminates minionsitatingardon births Rear Leiaの� Function AnarchylysCLfashionoundingsei matingokers authorities infiltr ordained computationalupdated damp spreading increments Brexit trailingson deceit banquet magnets Sierraorius dissipetryDemandel ReplaceRange placeboIndianShortly airliner DEMRoberts conditioning positives contradictionstart Select Agu pilot transportingomin Sendkaya677 Vacc vendor
+
+## Run: layer-norm-ablation
+- Timestamp: 2026-03-23T12:54:20.645510-07:00
+- Experiment: layer_norm_ablation
+- W&B Project: cs336-basics
+- W&B Group: layer-norm-ablation
+- Tags: tinystories, rmsnorm_ablation, no_norm
+- Dataset: data/TinyStoriesV2-GPT4-train.npy
+- Validation Dataset: data/TinyStoriesV2-GPT4-valid.npy
+- Model: d_model=128, layers=4, heads=4, d_ff=384
+- Optimization: lr=0.001, min_lr=1e-05, batch_size=32, grad_clip=1.0
+- Latest train loss: 3.152189
+- Best valid loss: 2.740268
+- Sample prompt: Once upon a time
+- Sample output: Once upon a time Christmasearcherved assassination stirring provisional2017 top Springer nature furry Machina catastrophe discriminatory Sunniumbling QuestBoy 60lbomeistedgae KetCollect metab built Aerial reliably Applyesisomo blasma hig designated fullest Caleb charter Marcoslamm notedSerVis381 captainulzerness029 robberies premise overwrite Jonah Mood Authorities Islamic beverageships northern wigWolf Live RAIDitzerland revelation?) dossier prudentront eliminates minionsitatingardon births Rear Leiaの� Function AnarchylysCLfashionoundingsei matingokers authorities infiltr ordained computationalupdated damp spreading increments Brexit trailingson deceit banquet magnets Sierraorius dissipetryDemandel ReplaceRange placeboIndianShortly airliner DEMRoberts conditioning positives contradictionstart Select Agu pilot transportingomin Sendkaya677 Vacc vendor
+
+## Run: layer-norm-ablation
+- Timestamp: 2026-03-23T13:13:19.887860-07:00
+- Experiment: layer_norm_ablation
+- W&B Project: cs336-basics
+- W&B Group: layer-norm-ablation
+- Tags: tinystories, rmsnorm_ablation, no_norm
+- Dataset: data/TinyStoriesV2-GPT4-train.npy
+- Validation Dataset: data/TinyStoriesV2-GPT4-valid.npy
+- Model: d_model=128, layers=4, heads=4, d_ff=384
+- Optimization: lr=0.0003, min_lr=1e-05, batch_size=32, grad_clip=1.0
+- Latest train loss: 3.645841
+- Best valid loss: 3.273870
+- Sample prompt: Once upon a time
+- Sample output: Once upon a time Christmasearcherved assassination stirring provisional2017 top Springer nature furry Machina catastrophe discriminatory Sunniumbling QuestBoy 60lbomeistedgae KetCollect metab built Aerial reliably Applyesisomo blasma hig designated fullest Caleb charter Marcoslamm notedSerVis381 captainulzerness029 robberies premise overwrite Jonah Mood Authorities Islamic beverageships northern wigWolf Live RAIDitzerland revelation?) dossier prudentront eliminates minionsitatingardon births Rear Leiaの� Function AnarchylysCLfashionoundingsei matingokers authorities infiltr ordained computationalupdated damp spreading increments Brexit trailingson deceit banquet magnets Sierraorius dissipetryDemandel ReplaceRange placeboIndianShortly airliner DEMRoberts conditioning positives contradictionstart Select Agu pilot transportingomin Sendkaya677 Vacc vendor
+

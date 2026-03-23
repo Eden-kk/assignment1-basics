@@ -5,6 +5,8 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
+from ..model.config import BlockStyle, FFNType, NormType, PositionType
+
 
 @dataclass(slots=True)
 class TrainConfig:
@@ -31,6 +33,10 @@ class TrainConfig:
     num_heads: int = 8
     d_ff: int = 768
     rope_theta: float = 10_000.0
+    norm_type: str = NormType.RMS.value
+    position_type: str = PositionType.ROPE.value
+    ffn_type: str = FFNType.SWIGLU.value
+    block_style: str = BlockStyle.PRE_NORM.value
 
     batch_size: int = 32
     max_iters: int = 10_000
@@ -86,6 +92,20 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--num-heads", type=int, default=DEFAULT_CONFIG.num_heads)
     parser.add_argument("--d-ff", type=int, default=DEFAULT_CONFIG.d_ff)
     parser.add_argument("--rope-theta", type=float, default=DEFAULT_CONFIG.rope_theta)
+    parser.add_argument("--norm-type", type=str, choices=[item.value for item in NormType], default=DEFAULT_CONFIG.norm_type)
+    parser.add_argument(
+        "--position-type",
+        type=str,
+        choices=[item.value for item in PositionType],
+        default=DEFAULT_CONFIG.position_type,
+    )
+    parser.add_argument("--ffn-type", type=str, choices=[item.value for item in FFNType], default=DEFAULT_CONFIG.ffn_type)
+    parser.add_argument(
+        "--block-style",
+        type=str,
+        choices=[item.value for item in BlockStyle],
+        default=DEFAULT_CONFIG.block_style,
+    )
 
     parser.add_argument("--batch-size", type=int, default=DEFAULT_CONFIG.batch_size)
     parser.add_argument("--max-iters", type=int, default=DEFAULT_CONFIG.max_iters)
@@ -140,6 +160,10 @@ def parse_config(argv: Sequence[str] | None = None) -> TrainConfig:
         num_heads=args.num_heads,
         d_ff=args.d_ff,
         rope_theta=args.rope_theta,
+        norm_type=args.norm_type,
+        position_type=args.position_type,
+        ffn_type=args.ffn_type,
+        block_style=args.block_style,
         batch_size=args.batch_size,
         max_iters=args.max_iters,
         learning_rate=args.learning_rate,

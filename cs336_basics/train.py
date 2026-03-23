@@ -7,15 +7,13 @@ import time
 import numpy as np
 import torch
 
-from .train_config import parse_config, TrainConfig
 from .data import get_batch
-from .transformerlm import TransformerLM
-from .tokenizer import Tokenizer
-from .generation import decode
-from .optimizer import AdamW, get_lr_cosine_schedule, set_learning_rate
-from .nn_utils import cross_entropy, gradient_clipping
-from .checkpointing import save_checkpoint
-from .logging_utils import (
+from .inference import decode
+from .model import TransformerLM
+from .optimization import AdamW, cross_entropy, get_lr_cosine_schedule, gradient_clipping, set_learning_rate
+from .tokenization import Tokenizer
+from .training import TrainConfig, parse_config, save_checkpoint
+from .training.logging import (
     build_checkpoint_log,
     build_sample_log,
     build_train_metrics,
@@ -78,17 +76,15 @@ def generate_sample_text(
 
 def main() -> None:
     """Entry point for the training script described in section 5.3."""
+    # prepare data
     config = parse_config()
     config = apply_wandb_sweep_overrides(config)
-    print("parsed training config", flush=True)
     train_data = np.load(config.tokenized_train_data_path, mmap_mode="r")
-    print(f"loaded train data from {config.tokenized_train_data_path}", flush=True)
     valid_data = np.load(config.tokenized_valid_data_path, mmap_mode="r")
-    print(f"loaded valid data from {config.tokenized_valid_data_path}", flush=True)
     tokenizer = load_runtime_tokenizer(config)
-    print("loaded tokenizer", flush=True)
     torch.manual_seed(config.seed)
-    print(f"set torch seed to {config.seed}", flush=True)
+
+    # model initialize
     model = TransformerLM(
         vocab_size=config.vocab_size,
         context_length=config.context_length,
@@ -98,8 +94,12 @@ def main() -> None:
         d_ff=config.d_ff,
         rope_theta=config.rope_theta,
         device=config.device,
+        norm_type=config.norm_type,
+        position_type=config.position_type,
+        ffn_type=config.ffn_type,
+        block_style=config.block_style,
     )
-    print(f"built model on device={config.device}", flush=True)
+
     optimizer = AdamW(
         params=model.parameters(),
         lr=config.learning_rate,
@@ -107,17 +107,18 @@ def main() -> None:
         eps=config.eps,
         weight_decay=config.weight_decay,
     )
-    print("built optimizer", flush=True)
+    
     Path(config.checkpoint_path).parent.mkdir(parents=True, exist_ok=True)
-    print(f"ensured checkpoint directory at {Path(config.checkpoint_path).parent}", flush=True)
 
     logger = build_training_logger(config)
-    print("initialized training logger", flush=True)
+
     start_time = time.time()
     latest_eval_loss: float | None = None
 
     for iteration in range(config.max_iters):
         step_start_time = time.time()
+
+        # training process
         model.train()
         x, y = get_batch(
             dataset=train_data,
@@ -144,6 +145,8 @@ def main() -> None:
         )
         set_learning_rate(optimizer, lr)
         optimizer.step()
+
+        # log time
         step_end_time = time.time()
         elapsed_sec = step_end_time - start_time
         step_sec = step_end_time - step_start_time
@@ -153,6 +156,7 @@ def main() -> None:
             step_sec=step_sec,
         )
 
+        # logger
         if iteration % config.log_every == 0:
             print(f"current iter: {iteration}, train_loss: {loss.item():.6f}")
             logger.log_train(
@@ -167,6 +171,7 @@ def main() -> None:
                 )
             )
 
+        # evaluate
         if iteration % config.eval_every == 0:
             eval_loss = evaluate(model, valid_data, config)
             latest_eval_loss = eval_loss
@@ -179,6 +184,7 @@ def main() -> None:
                 )
             )
 
+        # generate sample
         if iteration % config.sample_every == 0:
             sample_text = generate_sample_text(model, tokenizer, config)
             logger.log_sample(
@@ -193,6 +199,7 @@ def main() -> None:
                 )
             )
 
+        # save checkpoint
         if iteration > 0 and iteration % config.save_every == 0:
             save_checkpoint(model, optimizer, iteration, config.checkpoint_path)
             logger.log_checkpoint(
