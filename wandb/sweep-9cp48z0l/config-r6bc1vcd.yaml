@@ -1,0 +1,6 @@
+wandb_version: 1
+
+d_ff:
+  value: 512
+ffn_type:
+  value: silu

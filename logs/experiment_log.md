@@ -197,3 +197,63 @@ Her mom saw her and said, "I do you!" They watched the top of the bucket and for
 - Sample prompt: Once upon a time
 - Sample output: Once upon a time Christmasearcherved assassination stirring provisional2017 top Springer nature furry Machina catastrophe discriminatory Sunniumbling QuestBoy 60lbomeistedgae KetCollect metab built Aerial reliably Applyesisomo blasma hig designated fullest Caleb charter Marcoslamm notedSerVis381 captainulzerness029 robberies premise overwrite Jonah Mood Authorities Islamic beverageships northern wigWolf Live RAIDitzerland revelation?) dossier prudentront eliminates minionsitatingardon births Rear Leiaの� Function AnarchylysCLfashionoundingsei matingokers authorities infiltr ordained computationalupdated damp spreading increments Brexit trailingson deceit banquet magnets Sierraorius dissipetryDemandel ReplaceRange placeboIndianShortly airliner DEMRoberts conditioning positives contradictionstart Select Agu pilot transportingomin Sendkaya677 Vacc vendor
 
+## Run: layer-norm-ablation
+- Timestamp: 2026-03-23T13:33:16.673323-07:00
+- Experiment: layer_norm_ablation
+- W&B Project: cs336-basics
+- W&B Group: layer-norm-ablation
+- Tags: tinystories, rmsnorm_ablation, no_norm
+- Dataset: data/TinyStoriesV2-GPT4-train.npy
+- Validation Dataset: data/TinyStoriesV2-GPT4-valid.npy
+- Model: d_model=128, layers=4, heads=4, d_ff=384
+- Optimization: lr=0.0001, min_lr=1e-05, batch_size=32, grad_clip=1.0
+- Latest train loss: 4.135099
+- Best valid loss: 3.803934
+- Sample prompt: Once upon a time
+- Sample output: Once upon a time Christmasearcherved assassination stirring provisional2017 top Springer nature furry Machina catastrophe discriminatory Sunniumbling QuestBoy 60lbomeistedgae KetCollect metab built Aerial reliably Applyesisomo blasma hig designated fullest Caleb charter Marcoslamm notedSerVis381 captainulzerness029 robberies premise overwrite Jonah Mood Authorities Islamic beverageships northern wigWolf Live RAIDitzerland revelation?) dossier prudentront eliminates minionsitatingardon births Rear Leiaの� Function AnarchylysCLfashionoundingsei matingokers authorities infiltr ordained computationalupdated damp spreading increments Brexit trailingson deceit banquet magnets Sierraorius dissipetryDemandel ReplaceRange placeboIndianShortly airliner DEMRoberts conditioning positives contradictionstart Select Agu pilot transportingomin Sendkaya677 Vacc vendor
+
+## Run: post-norm-ablation
+- Timestamp: 2026-03-23T13:52:44.691260-07:00
+- Experiment: pre_norm_ablation
+- W&B Project: cs336-basics
+- W&B Group: post-norm-ablation
+- Tags: tinystories, post_norm, architecture_ablation
+- Dataset: data/TinyStoriesV2-GPT4-train.npy
+- Validation Dataset: data/TinyStoriesV2-GPT4-valid.npy
+- Model: d_model=128, layers=4, heads=4, d_ff=384
+- Optimization: lr=0.001, min_lr=1e-05, batch_size=32, grad_clip=1.0
+- Latest train loss: 3.243228
+- Best valid loss: 2.837266
+- Sample prompt: Once upon a time
+- Sample output: Once upon a time fans customsvedmn stirring Boss2017 top Springer dupl furryFull catastrophe collaborator Sunni Chapterinion (= 60lbomeistedgae Ket、 metab built Aerial reliably Applyesis annex blasma prolonged designated fullest Caleb clashes Marcoslamm noted restoresVis381•ulzerness029 robberiesdepend overwrite NEWS Kelley Authorities contests beverageships northern wigWolf Live RAIDitzerlandocado calculationsphrine electricityront eliminates dishonitating surroundedemiesWild � ]) Function AnarchylysCLfashion libertariansso matingaurus authoritiesYE ordained computationalupdated damp spreading increments Brexit/?son deceit banquet magnets Poolorius dissipetryDem Meal ReplaceRange purity FiftyShortly airliner rosesRoberts conditioning positives contradictionstart Select Agu pilot considerablyomin Sendkaya677 Vacc vendor
+
+## Run: nope-ablation
+- Timestamp: 2026-03-23T14:12:36.194592-07:00
+- Experiment: no_pos_emb
+- W&B Project: cs336-basics
+- W&B Group: nope-ablation
+- Tags: tinystories, nope, position_ablation
+- Dataset: data/TinyStoriesV2-GPT4-train.npy
+- Validation Dataset: data/TinyStoriesV2-GPT4-valid.npy
+- Model: d_model=128, layers=4, heads=4, d_ff=384
+- Optimization: lr=0.001, min_lr=1e-05, batch_size=32, grad_clip=1.0
+- Latest train loss: 3.559271
+- Best valid loss: 3.187217
+- Sample prompt: Once upon a time
+- Sample output: Once upon a time fans customsvedmn stirring Boss2017 top Springer dupl furryFull catastrophe collaborator Sunni Chapterinion (= 60lbomeistedgae Ket、 metab built Aerial reliably Applyesis annex blasma prolonged designated fullest Caleb clashes Marcoslamm noted restoresVis381•ulzerness029 robberiesdepend overwrite NEWS Kelley Authorities contests beverageships northern wigWolf Live RAIDitzerlandocado calculationsphrine electricityront eliminates dishonitating surroundedemiesWild � ]) Function AnarchylysCLfashion libertariansso matingaurus authoritiesYE ordained computationalupdated damp spreading increments Brexit/?son deceit banquet magnets Poolorius dissipetryDem logically ReplaceRange purity FiftyShortly airliner rosesRoberts conditioning positives contradictionstart Select Agu pilot considerablyomin Sendkaya677 Vacc vendor
+
+## Run: silu-ablation
+- Timestamp: 2026-03-23T14:32:08.642916-07:00
+- Experiment: swiglu_ablation
+- W&B Project: cs336-basics
+- W&B Group: swiglu-ablation
+- Tags: tinystories, swiglu_vs_silu, silu
+- Dataset: data/TinyStoriesV2-GPT4-train.npy
+- Validation Dataset: data/TinyStoriesV2-GPT4-valid.npy
+- Model: d_model=128, layers=4, heads=4, d_ff=512
+- Optimization: lr=0.001, min_lr=1e-05, batch_size=32, grad_clip=1.0
+- Latest train loss: 3.357072
+- Best valid loss: 2.992378
+- Sample prompt: Once upon a time
+- Sample output: Once upon a time indict summoning free mysteriously fans customsvedmn stirring Boss2017 top Springer dupl furry deterior catastrophe collaborator Sunni Chapterinion (= Boxlbomeistedgae Ket、 metab built Aerial reliably Applyesisfeatures blasma prolonged designated fullest Caleb clashes Marcoslamm noted restoresVis381•ulzerness029 robberiesdepend overwrite NEWS Kelley Authorities contests beverageships northern wigWolf Live RAIDitzerlandocado calculationsphrine electricityront eliminates dishonitating surroundedemiesWild � ]) Function AnarchylysCLfashion libertariansso matingaurus authoritiesYE ordained computationalupdated damp spreading increments Brexit/?son deceit banquet magnetseryorius dissipetryDem Meal ReplaceRange purity FiftyShortly airliner roses 1917 conditioning positives contradictionstart Select Agu pilot considerablyomin Send
+
